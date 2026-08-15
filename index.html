@@ -3,74 +3,1650 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Movie Game Hub — discover movies, games and useful web tools.">
 <title>Movie Game Hub</title>
 
 <style>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+
+:root{
+    --bg:#070b14;
+    --bg2:#0c1220;
+    --card:#111827;
+    --card2:#172033;
+    --text:#f8fafc;
+    --muted:#94a3b8;
+    --line:rgba(255,255,255,.08);
+    --accent:#7c3aed;
+    --accent2:#a855f7;
+    --danger:#ef4444;
+    --shadow:0 20px 60px rgba(0,0,0,.35);
+}
+
+body.light{
+    --bg:#f4f7fb;
+    --bg2:#ffffff;
+    --card:#ffffff;
+    --card2:#eef2f7;
+    --text:#0f172a;
+    --muted:#64748b;
+    --line:rgba(15,23,42,.1);
+    --shadow:0 20px 60px rgba(15,23,42,.12);
+}
+
 body{
     margin:0;
-    font-family:Arial,sans-serif;
-    background:#0f172a;
-    color:white;
+    background:
+        radial-gradient(circle at 20% 0%,rgba(124,58,237,.18),transparent 35%),
+        radial-gradient(circle at 90% 10%,rgba(168,85,247,.12),transparent 30%),
+        var(--bg);
+    color:var(--text);
+    font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    min-height:100vh;
+    transition:.25s ease;
 }
-header{
-    background:#111827;
-    padding:20px;
-    text-align:center;
-}
-h1{
-    margin:0;
-}
-nav{
-    margin-top:10px;
-}
-nav a{
-    color:white;
+
+button,input,select{font:inherit}
+
+button{cursor:pointer}
+
+a{
+    color:inherit;
     text-decoration:none;
-    margin:0 15px;
 }
-.section{
-    padding:40px 20px;
+
+.container{
+    width:min(1200px,calc(100% - 32px));
+    margin:auto;
 }
-.card{
-    background:#1e293b;
-    padding:20px;
+
+/* NAV */
+
+.nav{
+    position:sticky;
+    top:0;
+    z-index:100;
+    backdrop-filter:blur(18px);
+    background:rgba(7,11,20,.72);
+    border-bottom:1px solid var(--line);
+}
+
+body.light .nav{
+    background:rgba(255,255,255,.75);
+}
+
+.nav-inner{
+    height:72px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:900;
+    font-size:20px;
+    white-space:nowrap;
+}
+
+.logo-icon{
+    width:38px;
+    height:38px;
+    display:grid;
+    place-items:center;
     border-radius:12px;
-    margin:15px 0;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    box-shadow:0 8px 30px rgba(124,58,237,.35);
+}
+
+.nav-links{
+    display:flex;
+    gap:8px;
+}
+
+.nav-links a{
+    padding:10px 14px;
+    border-radius:10px;
+    color:var(--muted);
+    transition:.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active{
+    background:var(--card2);
+    color:var(--text);
+}
+
+.nav-actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.icon-btn{
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--text);
+    width:42px;
+    height:42px;
+    border-radius:12px;
+}
+
+.menu-btn{
+    display:none;
+}
+
+/* HERO */
+
+.hero{
+    padding:90px 0 60px;
+}
+
+.hero-grid{
+    display:grid;
+    grid-template-columns:1.2fr .8fr;
+    gap:45px;
+    align-items:center;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(124,58,237,.13);
+    color:#c4b5fd;
+    border:1px solid rgba(124,58,237,.25);
+    border-radius:999px;
+    padding:8px 13px;
+    font-size:13px;
+    font-weight:700;
+}
+
+.hero h1{
+    font-size:clamp(44px,7vw,78px);
+    line-height:.98;
+    margin:20px 0;
+    letter-spacing:-4px;
+}
+
+.gradient{
+    background:linear-gradient(135deg,#fff,#c4b5fd,#a855f7);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+
+.hero p{
+    color:var(--muted);
+    max-width:650px;
+    font-size:18px;
+    line-height:1.7;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:12px;
+    margin-top:28px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    border:0;
+    padding:13px 18px;
+    border-radius:12px;
+    font-weight:800;
+    transition:.2s;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.btn-primary{
+    color:white;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    box-shadow:0 12px 35px rgba(124,58,237,.3);
+}
+
+.btn-secondary{
+    background:var(--card);
+    color:var(--text);
+    border:1px solid var(--line);
+}
+
+.hero-art{
+    min-height:400px;
+    border-radius:28px;
+    border:1px solid var(--line);
+    background:
+        linear-gradient(135deg,rgba(124,58,237,.35),transparent 55%),
+        linear-gradient(45deg,rgba(168,85,247,.2),transparent),
+        var(--card);
+    box-shadow:var(--shadow);
+    position:relative;
+    overflow:hidden;
+}
+
+.hero-art::before,
+.hero-art::after{
+    content:"";
+    position:absolute;
+    border-radius:50%;
+    filter:blur(2px);
+}
+
+.hero-art::before{
+    width:240px;
+    height:240px;
+    background:rgba(124,58,237,.35);
+    top:-60px;
+    right:-60px;
+}
+
+.hero-art::after{
+    width:180px;
+    height:180px;
+    background:rgba(168,85,247,.25);
+    bottom:-60px;
+    left:-40px;
+}
+
+.hero-screen{
+    position:absolute;
+    inset:45px;
+    border-radius:20px;
+    background:rgba(5,8,15,.75);
+    border:1px solid rgba(255,255,255,.12);
+    backdrop-filter:blur(10px);
+    padding:22px;
+}
+
+.screen-top{
+    display:flex;
+    gap:7px;
+}
+
+.dot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:#64748b;
+}
+
+.screen-lines{
+    margin-top:35px;
+    display:grid;
+    gap:14px;
+}
+
+.screen-line{
+    height:13px;
+    background:rgba(255,255,255,.08);
+    border-radius:10px;
+}
+
+.screen-line:nth-child(2){width:75%}
+.screen-line:nth-child(3){width:55%}
+
+/* SECTIONS */
+
+section{
+    padding:70px 0;
+}
+
+.section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+    gap:20px;
+    margin-bottom:25px;
+}
+
+.section-title{
+    margin:0;
+    font-size:32px;
+}
+
+.section-subtitle{
+    color:var(--muted);
+    margin:7px 0 0;
+}
+
+.search{
+    width:300px;
+    max-width:100%;
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--text);
+    border-radius:12px;
+    padding:13px 15px;
+    outline:none;
+}
+
+.search:focus{
+    border-color:var(--accent);
+}
+
+/* FILTERS */
+
+.filters{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:25px;
+}
+
+.filter{
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--muted);
+    padding:9px 13px;
+    border-radius:999px;
+}
+
+.filter.active,
+.filter:hover{
+    background:var(--accent);
+    color:white;
+    border-color:var(--accent);
+}
+
+/* CARDS */
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:18px;
+}
+
+.card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:16px;
+    overflow:hidden;
+    transition:.25s;
+    box-shadow:0 8px 30px rgba(0,0,0,.12);
+}
+
+.card:hover{
+    transform:translateY(-6px);
+    box-shadow:var(--shadow);
+}
+
+.poster{
+    aspect-ratio:2/3;
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(135deg,#1e293b,#312e81);
+}
+
+.poster img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+.poster-placeholder{
+    height:100%;
+    display:grid;
+    place-items:center;
+    text-align:center;
+    padding:20px;
+    font-size:28px;
+    font-weight:900;
+    background:
+        radial-gradient(circle at 30% 20%,rgba(168,85,247,.45),transparent 30%),
+        linear-gradient(135deg,#111827,#312e81);
+}
+
+.favorite{
+    position:absolute;
+    top:10px;
+    right:10px;
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,.15);
+    background:rgba(0,0,0,.55);
+    color:white;
+    font-size:18px;
+    z-index:2;
+}
+
+.favorite.active{
+    color:#f87171;
+}
+
+.card-body{
+    padding:14px;
+}
+
+.card-title{
+    margin:0;
+    font-size:16px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.meta{
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    margin-top:8px;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.rating{
+    color:#fbbf24;
+}
+
+.card-button{
+    width:100%;
+    margin-top:12px;
+    padding:9px;
+    border-radius:9px;
+    border:1px solid var(--line);
+    background:var(--card2);
+    color:var(--text);
+}
+
+/* GAMES */
+
+.game-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.game{
+    min-height:210px;
+    padding:24px;
+    border-radius:18px;
+    border:1px solid var(--line);
+    background:
+        linear-gradient(135deg,rgba(124,58,237,.15),transparent),
+        var(--card);
+    position:relative;
+    overflow:hidden;
+}
+
+.game-icon{
+    width:55px;
+    height:55px;
+    display:grid;
+    place-items:center;
+    border-radius:16px;
+    background:var(--card2);
+    font-size:27px;
+}
+
+.game h3{
+    margin:18px 0 8px;
+}
+
+.game p{
+    color:var(--muted);
+    line-height:1.5;
+}
+
+/* TOOLS */
+
+.tools-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.tool{
+    padding:22px;
+    border-radius:16px;
+    border:1px solid var(--line);
+    background:var(--card);
+}
+
+.tool-icon{
+    font-size:27px;
+}
+
+.tool h3{
+    margin-bottom:7px;
+}
+
+.tool p{
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.5;
+}
+
+/* EMPTY */
+
+.empty{
+    grid-column:1/-1;
+    padding:50px 20px;
+    text-align:center;
+    border:1px dashed var(--line);
+    border-radius:16px;
+    color:var(--muted);
+}
+
+/* MODAL */
+
+.modal{
+    position:fixed;
+    inset:0;
+    z-index:500;
+    display:none;
+    place-items:center;
+    padding:20px;
+    background:rgba(0,0,0,.75);
+    backdrop-filter:blur(8px);
+}
+
+.modal.open{
+    display:grid;
+}
+
+.modal-box{
+    width:min(750px,100%);
+    max-height:90vh;
+    overflow:auto;
+    border-radius:22px;
+    border:1px solid var(--line);
+    background:var(--card);
+    box-shadow:var(--shadow);
+    animation:pop .2s ease;
+}
+
+@keyframes pop{
+    from{opacity:0;transform:scale(.96)}
+    to{opacity:1;transform:scale(1)}
+}
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px;
+    border-bottom:1px solid var(--line);
+}
+
+.close{
+    width:38px;
+    height:38px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    background:var(--card2);
+    color:var(--text);
+}
+
+.modal-content{
+    padding:25px;
+}
+
+.detail{
+    display:grid;
+    grid-template-columns:180px 1fr;
+    gap:25px;
+}
+
+.detail-poster{
+    aspect-ratio:2/3;
+    border-radius:14px;
+    overflow:hidden;
+    background:linear-gradient(135deg,#312e81,#111827);
+}
+
+.detail-poster img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.detail p{
+    color:var(--muted);
+    line-height:1.7;
+}
+
+/* FOOTER */
+
+footer{
+    padding:45px 0;
+    border-top:1px solid var(--line);
+    color:var(--muted);
+}
+
+.footer-inner{
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+}
+
+/* MOBILE */
+
+@media(max-width:1000px){
+    .grid{grid-template-columns:repeat(4,1fr)}
+    .tools-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:800px){
+    .hero-grid{grid-template-columns:1fr}
+    .hero-art{display:none}
+    .grid{grid-template-columns:repeat(3,1fr)}
+    .game-grid{grid-template-columns:1fr 1fr}
+    
+    .nav-links{
+        position:absolute;
+        left:16px;
+        right:16px;
+        top:80px;
+        display:none;
+        flex-direction:column;
+        background:var(--card);
+        border:1px solid var(--line);
+        border-radius:16px;
+        padding:10px;
+    }
+
+    .nav-links.open{display:flex}
+    .menu-btn{display:block}
+}
+
+@media(max-width:560px){
+    .container{width:min(100% - 22px,1200px)}
+    .hero{padding-top:55px}
+    .hero h1{letter-spacing:-2px}
+    .section-head{align-items:stretch;flex-direction:column}
+    .search{width:100%}
+    .grid{grid-template-columns:repeat(2,1fr);gap:12px}
+    .game-grid{grid-template-columns:1fr}
+    .tools-grid{grid-template-columns:1fr}
+    .detail{grid-template-columns:1fr}
+    .detail-poster{width:170px}
+    .footer-inner{flex-direction:column}
 }
 </style>
 </head>
 
 <body>
 
-<header>
-    <h1>Movie Game Hub</h1>
-    <nav>
-        <a href="#movies">Movies</a>
-        <a href="#games">Games</a>
-        <a href="#tools">Tools</a>
-    </nav>
+<header class="nav">
+<div class="container nav-inner">
+
+<a class="logo" href="#">
+    <span class="logo-icon">🎬</span>
+    <span>Movie Game Hub</span>
+</a>
+
+<nav class="nav-links" id="navLinks">
+    <a href="#home" class="active">Home</a>
+    <a href="#movies">Movies</a>
+    <a href="#games">Games</a>
+    <a href="#tools">Tools</a>
+</nav>
+
+<div class="nav-actions">
+    <button class="icon-btn" id="themeBtn" title="Toggle theme">☀️</button>
+    <button class="icon-btn menu-btn" id="menuBtn">☰</button>
+</div>
+
+</div>
 </header>
 
-<section class="section" id="movies">
-    <h2>Movies</h2>
-    <div class="card">
-        Browse movie information and discover new films.
+<main>
+
+<!-- HERO -->
+
+<section class="hero" id="home">
+<div class="container hero-grid">
+
+<div>
+    <span class="badge">✦ YOUR ENTERTAINMENT HUB</span>
+
+    <h1>
+        Movies.<br>
+        <span class="gradient">Games.</span><br>
+        More.
+    </h1>
+
+    <p>
+        Discover movies, explore games, and access useful web tools
+        from one fast and modern place.
+    </p>
+
+    <div class="hero-buttons">
+        <a class="btn btn-primary" href="#movies">Explore Movies</a>
+        <a class="btn btn-secondary" href="#games">Explore Games</a>
     </div>
+</div>
+
+<div class="hero-art">
+    <div class="hero-screen">
+        <div class="screen-top">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+
+        <div class="screen-lines">
+            <div class="screen-line"></div>
+            <div class="screen-line"></div>
+            <div class="screen-line"></div>
+        </div>
+
+        <div style="
+            margin-top:45px;
+            height:120px;
+            border-radius:15px;
+            background:linear-gradient(135deg,rgba(124,58,237,.55),rgba(168,85,247,.12));
+        "></div>
+    </div>
+</div>
+
+</div>
 </section>
 
-<section class="section" id="games">
-    <h2>Games</h2>
-    <div class="card">
-        Play or explore games here.
-    </div>
+<!-- MOVIES -->
+
+<section id="movies">
+<div class="container">
+
+<div class="section-head">
+<div>
+    <h2 class="section-title">Movies</h2>
+    <p class="section-subtitle">Find something worth watching.</p>
+</div>
+
+<input
+    class="search"
+    id="movieSearch"
+    type="search"
+    placeholder="Search movies..."
+>
+</div>
+
+<div class="filters" id="movieFilters">
+    <button class="filter active" data-genre="All">All</button>
+    <button class="filter" data-genre="Action">Action</button>
+    <button class="filter" data-genre="Comedy">Comedy</button>
+    <button class="filter" data-genre="Drama">Drama</button>
+    <button class="filter" data-genre="Sci-Fi">Sci-Fi</button>
+    <button class="filter" data-genre="Horror">Horror</button>
+</div>
+
+<div class="grid" id="movieGrid"></div>
+
+</div>
 </section>
 
-<section class="section" id="tools">
-    <h2>Tools</h2>
-    <div class="card">
-        Web tools and utilities.
-    </div>
+<!-- GAMES -->
+
+<section id="games">
+<div class="container">
+
+<div class="section-head">
+<div>
+    <h2 class="section-title">Games</h2>
+    <p class="section-subtitle">Explore games and gaming content.</p>
+</div>
+
+<input
+    class="search"
+    id="gameSearch"
+    type="search"
+    placeholder="Search games..."
+>
+</div>
+
+<div class="game-grid" id="gameGrid"></div>
+
+</div>
 </section>
+
+<!-- TOOLS -->
+
+<section id="tools">
+<div class="container">
+
+<div class="section-head">
+<div>
+    <h2 class="section-title">Tools</h2>
+    <p class="section-subtitle">Useful tools in one place.</p>
+</div>
+</div>
+
+<div class="tools-grid">
+
+<div class="tool">
+    <div class="tool-icon">🧮</div>
+    <h3>Calculator</h3>
+    <p>Quick calculations directly in your browser.</p>
+    <button class="card-button" onclick="openTool('calculator')">
+        Open
+    </button>
+</div>
+
+<div class="tool">
+    <div class="tool-icon">⏱️</div>
+    <h3>Timer</h3>
+    <p>A simple browser-based countdown timer.</p>
+    <button class="card-button" onclick="openTool('timer')">
+        Open
+    </button>
+</div>
+
+<div class="tool">
+    <div class="tool-icon">🔐</div>
+    <h3>Password Generator</h3>
+    <p>Generate strong random passwords locally.</p>
+    <button class="card-button" onclick="openTool('password')">
+        Open
+    </button>
+</div>
+
+<div class="tool">
+    <div class="tool-icon">📝</div>
+    <h3>Notes</h3>
+    <p>Save quick notes locally in your browser.</p>
+    <button class="card-button" onclick="openTool('notes')">
+        Open
+    </button>
+</div>
+
+</div>
+
+</div>
+</section>
+
+</main>
+
+<footer>
+<div class="container footer-inner">
+    <div>© <span id="year"></span> Movie Game Hub</div>
+    <div>Built for entertainment & discovery.</div>
+</div>
+</footer>
+
+<!-- MODAL -->
+
+<div class="modal" id="modal">
+<div class="modal-box">
+
+<div class="modal-header">
+    <strong id="modalTitle">Details</strong>
+    <button class="close" onclick="closeModal()">×</button>
+</div>
+
+<div class="modal-content" id="modalContent"></div>
+
+</div>
+</div>
+
+<script>
+
+/* =========================
+   DATA
+========================= */
+
+const movies = [
+
+{
+    id:1,
+    title:"Interstellar",
+    year:2014,
+    genre:"Sci-Fi",
+    rating:"8.7",
+    description:"A team of explorers travels through a wormhole in space in search of a new home for humanity.",
+    poster:"https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg"
+},
+
+{
+    id:2,
+    title:"The Dark Knight",
+    year:2008,
+    genre:"Action",
+    rating:"9.0",
+    description:"Batman faces a criminal mastermind who pushes Gotham into chaos.",
+    poster:"https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg"
+},
+
+{
+    id:3,
+    title:"Inception",
+    year:2010,
+    genre:"Sci-Fi",
+    rating:"8.8",
+    description:"A skilled thief enters people's dreams to steal and plant ideas.",
+    poster:"https://image.tmdb.org/t/p/w500/oYuLEt3zVCKq57qu2F8dT7NIa6f.jpg"
+},
+
+{
+    id:4,
+    title:"The Hangover",
+    year:2009,
+    genre:"Comedy",
+    rating:"7.7",
+    description:"Three friends attempt to retrace their steps after a wild night in Las Vegas.",
+    poster:"https://image.tmdb.org/t/p/w500/uluhlXubGu1VxU63X9VHCLWDAYP.jpg"
+},
+
+{
+    id:5,
+    title:"The Conjuring",
+    year:2013,
+    genre:"Horror",
+    rating:"7.5",
+    description:"Paranormal investigators help a family experiencing terrifying events.",
+    poster:"https://image.tmdb.org/t/p/w500/wVYREutTvI2tmxr6ujrY7FfX2.jpg"
+},
+
+{
+    id:6,
+    title:"Gladiator",
+    year:2000,
+    genre:"Action",
+    rating:"8.5",
+    description:"A Roman general seeks revenge after being betrayed and forced into slavery.",
+    poster:"https://image.tmdb.org/t/p/w500/ty8TGRuvJLPUmAR1H1nRIsgwvim.jpg"
+},
+
+{
+    id:7,
+    title:"The Shawshank Redemption",
+    year:1994,
+    genre:"Drama",
+    rating:"9.3",
+    description:"Two imprisoned men develop a powerful friendship over many years.",
+    poster:"https://image.tmdb.org/t/p/w500/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg"
+},
+
+{
+    id:8,
+    title:"Avengers: Endgame",
+    year:2019,
+    genre:"Action",
+    rating:"8.4",
+    description:"The Avengers attempt to undo the devastation caused by Thanos.",
+    poster:"https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg"
+},
+
+{
+    id:9,
+    title:"The Matrix",
+    year:1999,
+    genre:"Sci-Fi",
+    rating:"8.7",
+    description:"A hacker discovers that reality is not what it appears to be.",
+    poster:"https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg"
+},
+
+{
+    id:10,
+    title:"Superbad",
+    year:2007,
+    genre:"Comedy",
+    rating:"7.6",
+    description:"Two high-school friends try to make the most of their final days before graduation.",
+    poster:"https://image.tmdb.org/t/p/w500/ek8e8txUyUwd2BNqj6lFEerHfBz.jpg"
+}
+
+];
+
+const games = [
+
+{
+    title:"Action Games",
+    icon:"🎮",
+    description:"Explore action-packed games and discover new experiences."
+},
+
+{
+    title:"Racing",
+    icon:"🏎️",
+    description:"Cars, speed, racing and competitive driving games."
+},
+
+{
+    title:"Adventure",
+    icon:"🗺️",
+    description:"Explore worlds, complete missions and discover adventures."
+},
+
+{
+    title:"Strategy",
+    icon:"♟️",
+    description:"Plan your moves and outsmart your opponents."
+},
+
+{
+    title:"Multiplayer",
+    icon:"👥",
+    description:"Find games designed to play with friends."
+},
+
+{
+    title:"Indie",
+    icon:"✨",
+    description:"Discover creative games from independent developers."
+}
+
+];
+
+/* =========================
+   MOVIES
+========================= */
+
+let currentGenre="All";
+
+const movieGrid=document.getElementById("movieGrid");
+const movieSearch=document.getElementById("movieSearch");
+
+function getFavorites(){
+    return JSON.parse(localStorage.getItem("favorites") || "[]");
+}
+
+function setFavorites(arr){
+    localStorage.setItem("favorites",JSON.stringify(arr));
+}
+
+function renderMovies(){
+
+    const search=movieSearch.value.toLowerCase().trim();
+
+    const filtered=movies.filter(movie=>{
+
+        const genreMatch=
+            currentGenre==="All" ||
+            movie.genre===currentGenre;
+
+        const searchMatch=
+            movie.title.toLowerCase().includes(search) ||
+            movie.genre.toLowerCase().includes(search);
+
+        return genreMatch && searchMatch;
+    });
+
+    movieGrid.innerHTML="";
+
+    if(!filtered.length){
+
+        movieGrid.innerHTML=`
+            <div class="empty">
+                No movies found.
+            </div>
+        `;
+
+        return;
+    }
+
+    const favorites=getFavorites();
+
+    filtered.forEach(movie=>{
+
+        const favorite=favorites.includes(movie.id);
+
+        const card=document.createElement("article");
+
+        card.className="card";
+
+        card.innerHTML=`
+
+            <div class="poster">
+
+                <img
+                    src="${movie.poster}"
+                    alt="${movie.title} poster"
+                    loading="lazy"
+                    onerror="this.style.display='none';this.nextElementSibling.style.display='grid';"
+                >
+
+                <div
+                    class="poster-placeholder"
+                    style="display:none"
+                >
+                    ${movie.title}
+                </div>
+
+                <button
+                    class="favorite ${favorite ? "active":""}"
+                    onclick="toggleFavorite(${movie.id})"
+                    aria-label="Favorite ${movie.title}"
+                >
+                    ${favorite ? "♥":"♡"}
+                </button>
+
+            </div>
+
+            <div class="card-body">
+
+                <h3 class="card-title">${movie.title}</h3>
+
+                <div class="meta">
+                    <span>${movie.year}</span>
+                    <span class="rating">★ ${movie.rating}</span>
+                </div>
+
+                <button
+                    class="card-button"
+                    onclick="showMovie(${movie.id})"
+                >
+                    View Details
+                </button>
+
+            </div>
+        `;
+
+        movieGrid.appendChild(card);
+    });
+}
+
+function toggleFavorite(id){
+
+    let favorites=getFavorites();
+
+    if(favorites.includes(id)){
+        favorites=favorites.filter(x=>x!==id);
+    }else{
+        favorites.push(id);
+    }
+
+    setFavorites(favorites);
+    renderMovies();
+}
+
+function showMovie(id){
+
+    const movie=movies.find(x=>x.id===id);
+
+    if(!movie)return;
+
+    document.getElementById("modalTitle").textContent=movie.title;
+
+    document.getElementById("modalContent").innerHTML=`
+
+        <div class="detail">
+
+            <div class="detail-poster">
+                <img
+                    src="${movie.poster}"
+                    alt="${movie.title}"
+                    onerror="this.style.display='none'"
+                >
+            </div>
+
+            <div>
+
+                <h2>${movie.title}</h2>
+
+                <div class="meta">
+                    <span>${movie.year} • ${movie.genre}</span>
+                    <span class="rating">★ ${movie.rating}</span>
+                </div>
+
+                <p>${movie.description}</p>
+
+                <button
+                    class="btn btn-primary"
+                    onclick="closeModal()"
+                >
+                    Close
+                </button>
+
+            </div>
+
+        </div>
+    `;
+
+    openModal();
+}
+
+/* =========================
+   GAMES
+========================= */
+
+const gameGrid=document.getElementById("gameGrid");
+const gameSearch=document.getElementById("gameSearch");
+
+function renderGames(){
+
+    const search=gameSearch.value.toLowerCase();
+
+    const filtered=games.filter(game=>
+        game.title.toLowerCase().includes(search) ||
+        game.description.toLowerCase().includes(search)
+    );
+
+    gameGrid.innerHTML="";
+
+    filtered.forEach(game=>{
+
+        const div=document.createElement("div");
+
+        div.className="game";
+
+        div.innerHTML=`
+
+            <div class="game-icon">${game.icon}</div>
+
+            <h3>${game.title}</h3>
+
+            <p>${game.description}</p>
+
+            <button
+                class="card-button"
+                onclick="showGame('${game.title}')"
+            >
+                Explore
+            </button>
+
+        `;
+
+        gameGrid.appendChild(div);
+    });
+
+    if(!filtered.length){
+
+        gameGrid.innerHTML=`
+            <div class="empty">
+                No games found.
+            </div>
+        `;
+    }
+}
+
+function showGame(title){
+
+    const game=games.find(x=>x.title===title);
+
+    document.getElementById("modalTitle").textContent=game.title;
+
+    document.getElementById("modalContent").innerHTML=`
+
+        <div style="text-align:center">
+
+            <div style="font-size:70px">
+                ${game.icon}
+            </div>
+
+            <h2>${game.title}</h2>
+
+            <p style="color:var(--muted)">
+                ${game.description}
+            </p>
+
+            <button
+                class="btn btn-primary"
+                onclick="closeModal()"
+            >
+                Back
+            </button>
+
+        </div>
+    `;
+
+    openModal();
+}
+
+/* =========================
+   MODAL
+========================= */
+
+function openModal(){
+    document.getElementById("modal").classList.add("open");
+    document.body.style.overflow="hidden";
+}
+
+function closeModal(){
+    document.getElementById("modal").classList.remove("open");
+    document.body.style.overflow="";
+}
+
+document.getElementById("modal").addEventListener("click",e=>{
+
+    if(e.target.id==="modal"){
+        closeModal();
+    }
+
+});
+
+document.addEventListener("keydown",e=>{
+
+    if(e.key==="Escape"){
+        closeModal();
+    }
+
+});
+
+/* =========================
+   FILTERS
+========================= */
+
+document.querySelectorAll(".filter").forEach(button=>{
+
+    button.addEventListener("click",()=>{
+
+        document.querySelectorAll(".filter")
+            .forEach(x=>x.classList.remove("active"));
+
+        button.classList.add("active");
+
+        currentGenre=button.dataset.genre;
+
+        renderMovies();
+    });
+
+});
+
+movieSearch.addEventListener("input",renderMovies);
+gameSearch.addEventListener("input",renderGames);
+
+/* =========================
+   THEME
+========================= */
+
+const themeBtn=document.getElementById("themeBtn");
+
+function updateThemeIcon(){
+
+    themeBtn.textContent=
+        document.body.classList.contains("light")
+        ? "🌙"
+        : "☀️";
+}
+
+themeBtn.addEventListener("click",()=>{
+
+    document.body.classList.toggle("light");
+
+    localStorage.setItem(
+        "theme",
+        document.body.classList.contains("light")
+        ? "light"
+        : "dark"
+    );
+
+    updateThemeIcon();
+});
+
+if(localStorage.getItem("theme")==="light"){
+    document.body.classList.add("light");
+}
+
+updateThemeIcon();
+
+/* =========================
+   MOBILE MENU
+========================= */
+
+const menuBtn=document.getElementById("menuBtn");
+const navLinks=document.getElementById("navLinks");
+
+menuBtn.addEventListener("click",()=>{
+
+    navLinks.classList.toggle("open");
+
+});
+
+navLinks.querySelectorAll("a").forEach(link=>{
+
+    link.addEventListener("click",()=>{
+        navLinks.classList.remove("open");
+    });
+
+});
+
+/* =========================
+   TOOLS
+========================= */
+
+function openTool(type){
+
+    if(type==="calculator"){
+
+        document.getElementById("modalTitle").textContent="Calculator";
+
+        document.getElementById("modalContent").innerHTML=`
+
+            <input
+                id="calcInput"
+                class="search"
+                style="width:100%"
+                placeholder="Example: 25 * 4 + 10"
+            >
+
+            <button
+                class="btn btn-primary"
+                style="margin-top:15px"
+                onclick="calculate()"
+            >
+                Calculate
+            </button>
+
+            <h2 id="calcResult"></h2>
+        `;
+
+    }
+
+    if(type==="timer"){
+
+        document.getElementById("modalTitle").textContent="Timer";
+
+        document.getElementById("modalContent").innerHTML=`
+
+            <input
+                id="timerSeconds"
+                class="search"
+                style="width:100%"
+                type="number"
+                min="1"
+                placeholder="Seconds"
+            >
+
+            <button
+                class="btn btn-primary"
+                style="margin-top:15px"
+                onclick="startTimer()"
+            >
+                Start
+            </button>
+
+            <h1 id="timerDisplay">00:00</h1>
+        `;
+
+    }
+
+    if(type==="password"){
+
+        document.getElementById("modalTitle").textContent="Password Generator";
+
+        document.getElementById("modalContent").innerHTML=`
+
+            <input
+                id="passwordLength"
+                class="search"
+                style="width:100%"
+                type="number"
+                min="8"
+                max="100"
+                value="20"
+            >
+
+            <button
+                class="btn btn-primary"
+                style="margin-top:15px"
+                onclick="generatePassword()"
+            >
+                Generate
+            </button>
+
+            <input
+                id="passwordResult"
+                class="search"
+                style="width:100%;margin-top:15px"
+                readonly
+            >
+        `;
+
+    }
+
+    if(type==="notes"){
+
+        document.getElementById("modalTitle").textContent="Notes";
+
+        document.getElementById("modalContent").innerHTML=`
+
+            <textarea
+                id="notes"
+                style="
+                    width:100%;
+                    min-height:250px;
+                    padding:15px;
+                    border-radius:12px;
+                    border:1px solid var(--line);
+                    background:var(--card2);
+                    color:var(--text);
+                    resize:vertical;
+                "
+                placeholder="Write your notes..."
+            ></textarea>
+
+            <button
+                class="btn btn-primary"
+                style="margin-top:15px"
+                onclick="saveNotes()"
+            >
+                Save Notes
+            </button>
+        `;
+
+        document.getElementById("notes").value=
+            localStorage.getItem("notes") || "";
+    }
+
+    openModal();
+}
+
+function calculate(){
+
+    const input=document.getElementById("calcInput").value;
+
+    const result=document.getElementById("calcResult");
+
+    try{
+
+        if(!/^[0-9+\-*/().%\s]+$/.test(input)){
+            throw new Error();
+        }
+
+        result.textContent=
+            "Result: " + Function('"use strict";return ('+input+')')();
+
+    }catch{
+
+        result.textContent="Invalid calculation.";
+
+    }
+}
+
+let timerInterval;
+
+function startTimer(){
+
+    clearInterval(timerInterval);
+
+    let seconds=
+        Number(document.getElementById("timerSeconds").value);
+
+    if(!seconds || seconds<1)return;
+
+    const display=document.getElementById("timerDisplay");
+
+    function update(){
+
+        const mins=
+            Math.floor(seconds/60).toString().padStart(2,"0");
+
+        const secs=
+            (seconds%60).toString().padStart(2,"0");
+
+        display.textContent=`${mins}:${secs}`;
+
+        if(seconds<=0){
+
+            clearInterval(timerInterval);
+
+            display.textContent="DONE!";
+
+            return;
+        }
+
+        seconds--;
+    }
+
+    update();
+
+    timerInterval=setInterval(update,1000);
+}
+
+function generatePassword(){
+
+    const length=
+        Math.max(
+            8,
+            Math.min(
+                100,
+                Number(document.getElementById("passwordLength").value) || 20
+            )
+        );
+
+    const chars=
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}";
+
+    let password="";
+
+    const array=
+        new Uint32Array(length);
+
+    crypto.getRandomValues(array);
+
+    for(let i=0;i<length;i++){
+        password+=chars[array[i]%chars.length];
+    }
+
+    document.getElementById("passwordResult").value=password;
+}
+
+function saveNotes(){
+
+    const text=document.getElementById("notes").value;
+
+    localStorage.setItem("notes",text);
+
+    alert("Notes saved.");
+
+}
+
+/* =========================
+   YEAR
+========================= */
+
+document.getElementById("year").textContent=
+    new Date().getFullYear();
+
+/* =========================
+   INITIALIZE
+========================= */
+
+renderMovies();
+renderGames();
+
+</script>
 
 </body>
 </html>
